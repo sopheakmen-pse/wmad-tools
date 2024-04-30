@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random String Generator with Exclusions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .loader {
+            text-align: center;
+            display: none;
+            margin: 2rem;
+        }
+
+        .result {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        #checkboxes {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+            font-size: 1.2 rem;
+        }
+
+        #randomString {
+            font-size: 8rem;
+            font-weight: bold;
+            color: purple;
+        }
+
+        button {
+            width: 300px;
+            padding: 1rem;
+            cursor: pointer;
+            font-size: 2rem;
+            /* margin-bottom: ; */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="result">
+        <h1>WMAD Preparation Session - 2024 </h1>
+
+        <div id="checkboxes"></div>
+        <button onclick="showResult()">Show Result</button>
+        <div class="loader">
+            <iframe src="https://giphy.com/embed/3o7bu3XilJ5BOiSGic" width="250" height="250" frameBorder="0"
+                class="giphy-embed"></iframe>
+        </div>
+        <p id="randomString"></p>
+    </div>
+
+
+    <script>
+        // Array of random strings
+        const strings = ["Elun Mask", "Bill Gates", "Mark Zuckerberg", "Tim Cook", "Sundar Pichai"];
+
+        // Function to generate random string
+        function generateRandomString(excludedItems) {
+            const filteredStrings = strings.filter(str => !excludedItems.includes(str));
+            const randomIndex = Math.floor(Math.random() * filteredStrings.length);
+            return filteredStrings[randomIndex];
+        }
+
+        // Function to create checkboxes for each item in the array
+        function createCheckboxes() {
+            const checkboxesDiv = document.getElementById('checkboxes');
+            strings.forEach(string => {
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = string;
+                checkbox.id = string;
+                const label = document.createElement('label');
+                label.htmlFor = string;
+                label.textContent = string;
+                const br = document.createElement('br');
+                checkboxesDiv.appendChild(checkbox);
+                checkboxesDiv.appendChild(label);
+                checkboxesDiv.appendChild(br);
+            });
+        }
+
+        // Function to display loading text and then show result
+        function showResult() {
+            const loader = document.querySelector('.loader');
+            const resultDiv = document.querySelector('.result');
+            const randomStringElement = document.getElementById('randomString');
+
+            randomStringElement.textContent = "";
+            loader.style.display = 'block';
+
+            setTimeout(() => {
+                const excludedItems = [];
+                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        excludedItems.push(checkbox.value);
+                    }
+                });
+
+                const randomString = generateRandomString(excludedItems);
+                randomStringElement.textContent = randomString;
+                loader.style.display = 'none';
+                resultDiv.style.display = 'block';
+            }, 1500);
+        }
+
+        // Call the function to create checkboxes when the page is loaded
+        window.onload = createCheckboxes;
+    </script>
+</body>
+
+</html>
